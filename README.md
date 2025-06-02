@@ -1,4 +1,4 @@
-# Jméno Příjmení
+# Jakub Zeman
 ---
 ## Zvolené rozšíření
 - Popisek

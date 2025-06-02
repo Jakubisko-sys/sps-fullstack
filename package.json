@@ -1,0 +1,16 @@
+{
+  "name": "sps-fullstack",
+  "version": "1.0.0",
+  "description": "0:todo list",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node database/seed.js"
+  },
+  "author": "Jakub Zeman",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}
