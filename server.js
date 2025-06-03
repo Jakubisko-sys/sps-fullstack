@@ -11,8 +11,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // API cesty 
-const apiRoutes = require('./api/api');
-app.use('/api', apiRoutes);
+//const apiRoutes = require('./api/api');
+//app.use('/api', apiRoutes);
+
+const visitorsRoutes = require('./api/visitors');
+app.use('/api/visitors', visitorsRoutes);
+
+const animalsRoutes = require('./api/animals');
+app.use('/api/animals', animalsRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
