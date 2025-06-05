@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Zvířata</title>
+</head>
+<body>
+  <h1>Seznam zvířat</h1>
+  <form id="animal-form">
+    <input type="text" id="name" placeholder="Jméno zvířete" required>
+    <input type="text" id="species" placeholder="Druh" required>
+    <button type="submit">Přidat</button>
+  </form>
+  <ul id="animal-list"></ul>
+  <script>
+    async function fetchAnimals() {
+      const res = await fetch('/api/animals');
+      const data = await res.json();
+      const list = document.getElementById('animal-list');
+      list.innerHTML = '';
+      data.forEach(a => {
+        const li = document.createElement('li');
+        li.textContent = `${a.name} (${a.species})`;
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById('animal-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const species = document.getElementById('species').value;
+      await fetch('/api/animals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, species })
+      });
+      e.target.reset();
+      fetchAnimals();
+    });
+
+    fetchAnimals();
+  </script>
+</body>
+</html>
