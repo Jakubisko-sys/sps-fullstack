@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence návštěvníků</title>
+</head>
+<body>
+    <h1>Návštěvníci</h1>
+    <section>
+        <h2>Přidat nového návštěvníka</h2>
+        <form id="visitor-form">
+            <div>
+                <label for="firstname">Křestní jméno:</label>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
+            <div>
+                <label for="lastname">Příjmení:</label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+            <div>
+                <button type="submit">Přidat návštěvníka</button>
+            </div>
+        </form>
+    </section>
+    <section>
+        <h2>Upravit návštěvníka</h2>
+        <form id="edit-visitor-form">
+            <div>
+                <label for="edit-firstname">Křestní jméno:</label>
+                <input type="text" id="edit-firstname" name="edit-firstname" required>
+            </div>
+            <div>
+                <label for="edit-lastname">Příjmení:</label>
+                <input type="text" id="edit-lastname" name="edit-lastname" required>
+            </div>
+            <div>
+                <button type="submit">Upravit návštěvníka</button>
+            </div>
+        </form>
+    </section>
+
+    <section>
+        <h2>Seznam návštěvníků</h2>
+        <ul id="visitor-list">
+            <!-- Zde se budou zobrazovat návštěvníci -->
+        </ul>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchVisitors);
+
+        document.getElementById('visitor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const firstname = document.getElementById('firstname').value;
+            const lastname = document.getElementById('lastname').value;
+            try {
+                const response = await fetch('/api/visitors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ firstname, lastname })
+                });
+                if (response.ok) {
+                    document.getElementById('visitor-form').reset();
+                    fetchVisitors();
+                } else {
+                    alert('Chyba při přidávání návštěvníka');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+
+        async function fetchVisitors() {
+            try {
+                const response = await fetch('/api/visitors');
+                const visitors = await response.json();
+                const visitorList = document.getElementById('visitor-list');
+                visitorList.innerHTML = '';
+                visitors.forEach(visitor => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${visitor.firstname} ${visitor.lastname}</strong>`;
+                    visitorList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Chyba při načítání návštěvníků:', error);
+            }
+        }
+
+        document.getElementById('edit-visitor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const firstname = document.getElementById('edit-firstname').value;
+            const lastname = document.getElementById('edit-lastname').value;
+            try {
+                const response = await fetch('/api/visitors/1', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ firstname, lastname })
+                });
+                if (response.ok) {
+                    document.getElementById('edit-visitor-form').reset();
+                    fetchVisitors();
+                } else {
+                    alert('Chyba při upravování návštěvníka');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+
+    </script>
+</body>
+</html>
