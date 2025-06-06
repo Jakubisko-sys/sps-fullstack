@@ -43,7 +43,7 @@ router.put('/:id', (req, res) => {
     [firstname, lastname, id],
     (err) => {
       if (err) return res.status(500).json({ error: err.message });
-      res.json({ message: 'Visitor updated' });
+      res.status(201).json({ message: 'Visitor updated' });
     }
   );
 });
