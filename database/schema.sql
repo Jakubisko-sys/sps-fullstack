@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS animals (
 
 --vytvor tabulku "visits"
 CREATE TABLE IF NOT EXISTS visits (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER,
   visitor_id INTEGER NOT NULL,
   animal_id INTEGER NOT NULL,
   visit_date DATE NOT NULL,
