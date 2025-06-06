@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence návštěv</title>
+</head>
+<body>
+    <h1>Seznam návštěv</h1>
+    <section>
+        <h2>Přidat novou návštěvu</h2>
+        <form id="visit-form">
+            <div>
+                <label for="visitor_id">ID návštěvníka:</label>
+                <input type="number" id="visitor_id" name="visitor_id" required>
+            </div>
+            <div>
+                <label for="animal_id">ID zvířete:</label>
+                <input type="number" id="animal_id" name="animal_id" required>
+            </div>
+            <div>
+                <label for="visit_date">Datum návštěvy:</label>
+                <input type="date" id="visit_date" name="visit_date" required>
+            </div>
+            <div>
+                <button type="submit">Přidat návštěvu</button>
+            </div>
+        </form>
+    </section>
+    <section>
+        <h2>Vyhledat návštěvu podle ID</h2>
+        <form id="search-visit-form">
+            <div> 
+                <label for="search-visit-id">ID návštěvy:</label>
+                <input type="number" id="search-visit-id" name="search-visit-id" required>
+            </div>
+            <div>
+                <button type="submit">Vyhledat návštěvu</button>
+            </div>
+        </form>
+    </section>
+    <section>
+        <h2>Upravit návštěvu</h2>
+        <form id="edit-visit-form">
+            <div> 
+                <label for="edit-visit-id">ID návštěvy:</label>
+                <input type="number" id="edit-visit-id" name="edit-visit-id" required>
+            </div>
+            <div>
+                <label for="edit-visitor_id">ID návštěvníka:</label>
+                <input type="number" id="edit-visitor_id" name="edit-visitor_id" required>
+            </div>
+            <div>
+                <label for="edit-animal_id">ID zvířete:</label>
+                <input type="number" id="edit-animal_id" name="edit-animal_id" required>
+            </div>
+            <div>
+                <label for="edit-visit_date">Datum návštěvy:</label>
+                <input type="date" id="edit-visit_date" name="edit-visit_date" required>
+            </div>
+            <div>
+                <button type="submit">Upravit návštěvu</button>
+            </div>
+        </form>
+    </section>
+    <section>
+        <h2>Smazat návštěvu</h2>
+        <form id="delete-visit-form">
+            <div> 
+                <label for="delete-visit-id">ID návštěvy:</label>
+                <input type="number" id="delete-visit-id" name="delete-visit-id" required>
+            </div>
+            <div>
+                <button type="submit">Smazat návštěvu</button>
+            </div>
+        </form>
+    </section>
+    <section>
+        <h2>Seznam návštěv</h2>
+        <ul id="visit-list">
+            <!-- Zde se budou zobrazovat návštěvy -->
+        </ul>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchVisits);
+
+        //add visit
+        document.getElementById('visit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const visitor_id = document.getElementById('visitor_id').value;
+            const animal_id = document.getElementById('animal_id').value;
+            const visit_date = document.getElementById('visit_date').value;
+            try {
+                const response = await fetch('/api/visits', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ visitor_id, animal_id, visit_date })
+                });
+                if (response.ok) {
+                    document.getElementById('visit-form').reset();
+                    fetchVisits();
+                } else {
+                    alert('Chyba při přidávání návštěvy');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+
+        //search visit
+        document.getElementById('search-visit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('search-visit-id').value;
+            try {
+                const response = await fetch(`/api/visits/${id}`);
+                if (response.ok) {
+                    const visit = await response.json();
+                    alert(`Návštěva: ${visit.visitor_id} - ${visit.animal_id} - ${visit.visit_date}`);
+                } else {
+                    alert('Návštěva nebyla nalezena');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+
+        //edit visit
+        document.getElementById('edit-visit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-visit-id').value;
+            const visitor_id = document.getElementById('edit-visitor_id').value;
+            const animal_id = document.getElementById('edit-animal_id').value;
+            const visit_date = document.getElementById('edit-visit_date').value;
+            try {
+                const response = await fetch(`/api/visits/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ visitor_id, animal_id, visit_date })
+                });
+                if (response.ok) {
+                    document.getElementById('edit-visit-form').reset();
+                    fetchVisits();
+                } else {
+                    alert('Chyba při upravování návštěvy');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+
+        //delete visit
+        document.getElementById('delete-visit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('delete-visit-id').value;
+            try {
+                const response = await fetch(`/api/visits/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    document.getElementById('delete-visit-form').reset();
+                    fetchVisits();
+                } else {
+                    alert('Chyba při mazání návštěvy');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+
+        //get all visits
+        async function fetchVisits() {
+            try {
+                const response = await fetch('/api/visits');
+                const visits = await response.json();
+                const visitList = document.getElementById('visit-list');
+                visitList.innerHTML = '';
+                visits.forEach(visit => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${visit.visitor_id} - ${visit.animal_id} - ${visit.visit_date}</strong>`;
+                    visitList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Chyba při načítání návštěv:', error);
+            }
+        }
+    </script>
+</body>
+</html>
