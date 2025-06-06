@@ -1,30 +1,82 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <title>Zvířata</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence zvířat</title>
 </head>
 <body>
   <h1>Seznam zvířat</h1>
-  <form id="animal-form">
-    <input type="text" id="name" placeholder="Jméno zvířete" required>
-    <input type="text" id="species" placeholder="Druh" required>
-    <button type="submit">Přidat</button>
-  </form>
-  <ul id="animal-list"></ul>
+  <section>
+    <h2>Přidat nové zvíře</h2>
+    <form id="animal-form">
+      <div> 
+        <label for="name">Jméno zvířete:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div>
+        <label for="species">Druh:</label>
+        <input type="text" id="species" name="species" required>
+      </div>
+      <div>
+        <button type="submit">Přidat zvíře</button>
+      </div>
+    </form>
+  </section>
+  <section>
+    <h2>Vyhledat zvíře podle ID</h2>
+    <form id="search-animal-form">
+      <div> 
+        <label for="search-animal-id">ID zvířete:</label>
+        <input type="number" id="search-animal-id" name="search-animal-id" required>
+      </div>
+      <div>
+        <button type="submit">Vyhledat zvíře</button>
+      </div>
+    </form>
+  </section>
+  <section>
+    <h2>Upravit zvíře</h2>
+    <form id="edit-animal-form">
+      <div> 
+        <label for="edit-animal-id">ID zvířete:</label>
+        <input type="number" id="edit-animal-id" name="edit-animal-id" required>
+      </div>
+      <div>
+        <label for="edit-name">Nové jméno zvířete:</label>
+        <input type="text" id="edit-name" name="edit-name" required>
+      </div>
+      <div>
+        <label for="edit-species">Nový druh:</label>
+        <input type="text" id="edit-species" name="edit-species" required>
+      </div>
+      <div>
+        <button type="submit">Upravit zvíře</button>
+      </div>
+    </form>
+  </section>
+  <section>
+    <h2>Smazat zvíře</h2>
+    <form id="delete-animal-form">
+      <div> 
+        <label for="delete-animal-id">ID zvířete:</label>
+        <input type="number" id="delete-animal-id" name="delete-animal-id" required>
+      </div>
+      <div>
+        <button type="submit">Smazat zvíře</button>
+      </div>
+    </form>
+  </section>
+  <section>
+    <h2>Seznam zvířat</h2>
+    <ul id="animal-list">
+      <!-- Zde se budou zobrazovat zvířata -->
+    </ul>
+  </section>
   <script>
-    async function fetchAnimals() {
-      const res = await fetch('/api/animals');
-      const data = await res.json();
-      const list = document.getElementById('animal-list');
-      list.innerHTML = '';
-      data.forEach(a => {
-        const li = document.createElement('li');
-        li.textContent = `${a.name} (${a.species})`;
-        list.appendChild(li);
-      });
-    }
+    document.addEventListener('DOMContentLoaded', fetchAnimals);
 
+    //add animal
     document.getElementById('animal-form').addEventListener('submit', async e => {
       e.preventDefault();
       const name = document.getElementById('name').value;
@@ -38,7 +90,77 @@
       fetchAnimals();
     });
 
-    fetchAnimals();
+    //search animal by id
+    document.getElementById('search-animal-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = document.getElementById('search-animal-id').value;
+      try {
+        const response = await fetch(`/api/animals/${id}`);
+        if (response.ok) {
+          const animal = await response.json();
+          alert(`Zvíře: ${animal.name} (${animal.species})`);
+        } else {
+          alert('Zvíře nebylo nalezeno');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+      }
+    });
+
+    //edit animal
+    document.getElementById('edit-animal-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = document.getElementById('edit-animal-id').value;
+      const name = document.getElementById('edit-name').value;
+      const species = document.getElementById('edit-species').value;
+      try {
+        const response = await fetch(`/api/animals/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, species })
+        });
+        if (response.ok) {
+          document.getElementById('edit-animal-form').reset();
+          fetchAnimals();
+        } else {
+          alert('Chyba při upravování zvířete');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+      }
+    });
+
+    //delete animal
+    document.getElementById('delete-animal-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = document.getElementById('delete-animal-id').value;
+      try {
+        const response = await fetch(`/api/animals/${id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          document.getElementById('delete-animal-form').reset();
+          fetchAnimals();
+        } else {
+          alert('Chyba při mazání zvířete');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+      }
+    });
+
+    //GET all animals
+    async function fetchAnimals() {
+      const res = await fetch('/api/animals');
+      const data = await res.json();
+      const list = document.getElementById('animal-list');
+      list.innerHTML = '';
+      data.forEach(a => {
+        const li = document.createElement('li');
+        li.textContent = `${a.name} (${a.species})`;
+        list.appendChild(li);
+      });
+    };
   </script>
 </body>
 </html>
