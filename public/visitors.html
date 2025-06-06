@@ -24,8 +24,24 @@
         </form>
     </section>
     <section>
+        <h2>Vyhledat návštěvníka podle ID</h2>
+        <form id="search-visitor-form">
+            <div> 
+                <label for="search-visitor-id">ID návštěvníka:</label>
+                <input type="number" id="search-visitor-id" name="search-visitor-id" required>
+            </div>
+            <div>
+                <button type="submit">Vyhledat návštěvníka</button>
+            </div>
+        </form>
+    </section>
+    <section>
         <h2>Upravit návštěvníka</h2>
         <form id="edit-visitor-form">
+            <div> 
+                <label for="edit-visitor-id">ID návštěvníka:</label>
+                <input type="number" id="edit-visitor-id" name="edit-visitor-id" required>
+            </div>
             <div>
                 <label for="edit-firstname">Křestní jméno:</label>
                 <input type="text" id="edit-firstname" name="edit-firstname" required>
@@ -39,7 +55,17 @@
             </div>
         </form>
     </section>
-
+    <section>
+        <h2>Smazat návštěvníka</h2>
+        <form id="delete-visitor-form">
+            <div> 
+                <label for="delete-visitor-id">ID návštěvníka:</label>
+                <input type="number" id="delete-visitor-id" name="delete-visitor-id" required>
+            </div>
+            <div>
+            <button type="submit">Smazat návštěvníka</button>
+            </div>
+        </form>
     <section>
         <h2>Seznam návštěvníků</h2>
         <ul id="visitor-list">
@@ -49,6 +75,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', fetchVisitors);
 
+        //add visitor
         document.getElementById('visitor-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const firstname = document.getElementById('firstname').value;
@@ -69,7 +96,68 @@
                 console.error('Chyba:', error);
             }
         });
+        
+        //search visitor
+        document.getElementById('search-visitor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('search-visitor-id').value;
+            try {
+                const response = await fetch(`/api/visitors/${id}`);
+                if (response.ok) {
+                    const visitor = await response.json();
+                    alert(`Návštěvník: ${visitor.firstname} ${visitor.lastname}`);
+                } else {
+                    alert('Návštěvník nebyl nalezen');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
 
+
+        //edit visitor
+        document.getElementById('edit-visitor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-visitor-id').value;
+            const firstname = document.getElementById('edit-firstname').value;
+            const lastname = document.getElementById('edit-lastname').value;
+            try {
+                const response = await fetch(`/api/visitors/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ firstname, lastname })
+                });
+                if (response.ok) {
+                    document.getElementById('edit-visitor-form').reset();
+                    fetchVisitors();
+                } else {
+                    alert('Chyba při upravování návštěvníka');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+        
+        //delete visitor
+        document.getElementById('delete-visitor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('delete-visitor-id').value;
+            try {
+                const response = await fetch(`/api/visitors/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    document.getElementById('delete-visitor-form').reset();
+                    fetchVisitors();
+                } else {
+                    alert('Chyba při mazání návštěvníka');
+                }
+            } catch (error) {
+                console.error('Chyba:', error);
+            }
+        });
+
+        //get all visitors
         async function fetchVisitors() {
             try {
                 const response = await fetch('/api/visitors');
@@ -85,28 +173,6 @@
                 console.error('Chyba při načítání návštěvníků:', error);
             }
         }
-
-        document.getElementById('edit-visitor-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const firstname = document.getElementById('edit-firstname').value;
-            const lastname = document.getElementById('edit-lastname').value;
-            try {
-                const response = await fetch('/api/visitors/1', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ firstname, lastname })
-                });
-                if (response.ok) {
-                    document.getElementById('edit-visitor-form').reset();
-                    fetchVisitors();
-                } else {
-                    alert('Chyba při upravování návštěvníka');
-                }
-            } catch (error) {
-                console.error('Chyba:', error);
-            }
-        });
-
     </script>
 </body>
 </html>
