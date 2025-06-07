@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                    // Nastavení na ES6 (nebo ESNext pro nejnovější)
+    "module": "ESNext",                 // Pro použití ES moduly
+    "moduleResolution": "node",         // Řešení modulů podle Node.js způsobu
+    "outDir": "./dist",                 // Výstupní složka pro kompilované soubory
+    "rootDir": "./src",                 // Kořenová složka s TypeScript soubory
+    "esModuleInterop": true,            // Povolí importování CommonJS modulů (důležité pro knihovny jako sqlite3)
+    "strict": true,                     // Povolit přísné kontrolování typů
+    "skipLibCheck": true,               // Přeskočit kontrolu knihoven (pro rychlejší kompilaci)
+    "forceConsistentCasingInFileNames": true,  // Povolit konzistenci velikosti písmen v názvech souborů
+    "declaration": true,                // Generování `.d.ts` souborů pro typové definice
+    "resolveJsonModule": true           // Povolí importování JSON souborů (pokud je potřeba)
+  },
+  "include": [
+    "src/**/*"                          // Cesta k souborům pro kompilaci
+  ],
+  "exclude": [
+    "node_modules"                       // Vyloučení složky node_modules
+  ]
+}
