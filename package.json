@@ -1,11 +1,10 @@
 {
   "name": "sps-fullstack",
   "version": "1.0.0",
-  "description": "0:todo list",
-  "main": "index.js",
+  "description": "0: Evidence návštěvníků v ZOO",
+  "main": "index.ts",
   "scripts": {
-    "start": "node server.js",
-    "seed": "node database/seed.js"
+    "start": "ts-node server.ts"
   },
   "author": "Jakub Zeman",
   "license": "ISC",
