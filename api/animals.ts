@@ -1,20 +1,27 @@
-const express = require('express');
-const db = require('../database/db');
+import express, { Request, Response } from 'express';
+import { Database } from 'sqlite3'; 
+import db from '../database/db';
 
 const router = express.Router();
 
+// Typ pro tělo požadavku při vytváření a aktualizaci zvířat
+interface Animal {
+  name: string;
+  species: string;
+}
+
 // GET all animals
-router.get('/', (req, res) => {
-  db.all('SELECT * FROM animals', [], (err, rows) => {
+router.get('/', (req: Request, res: Response): void => {
+  db.all('SELECT * FROM animals', [], (err: Error, rows: any[]) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(rows);
   });
 });
 
 // GET a single animal by id
-router.get('/:id', (req, res) => {
+router.get('/:id', (req: Request, res: Response): void => {
   const id = req.params.id;
-  db.get('SELECT * FROM animals WHERE id = ?', [id], (err, row) => {
+  db.get('SELECT * FROM animals WHERE id = ?', [id], (err: Error, row: any) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!row) return res.status(404).json({ error: 'Animal not found' });
     res.json(row);
@@ -22,12 +29,12 @@ router.get('/:id', (req, res) => {
 });
 
 // CREATE a new animal
-router.post('/', (req, res) => {
-  const { name, species } = req.body;
+router.post('/', (req: Request, res: Response): void => {
+  const { name, species }: Animal = req.body;
   db.run(
     'INSERT INTO animals (name, species) VALUES (?, ?)',
     [name, species],
-    (err) => {
+    (err: Error) => {
       if (err) return res.status(500).json({ error: err.message });
       res.status(201).json({ message: 'Animal created' });
     }
@@ -35,13 +42,13 @@ router.post('/', (req, res) => {
 });
 
 // UPDATE an animal
-router.put('/:id', (req, res) => {
+router.put('/:id', (req: Request, res: Response): void => {
   const id = req.params.id;
-  const { name, species } = req.body;
+  const { name, species }: Animal = req.body;
   db.run(
     'UPDATE animals SET name = ?, species = ? WHERE id = ?',
     [name, species, id],
-    (err) => {
+    (err: Error) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ message: 'Animal updated' });
     }
@@ -49,12 +56,12 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE an animal
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req: Request, res: Response): void => {
   const id = req.params.id;
-  db.run('DELETE FROM animals WHERE id = ?', [id], (err) => {
+  db.run('DELETE FROM animals WHERE id = ?', [id], (err: Error) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Animal deleted' });
   });
 });
 
-module.exports = router;
+export default router;
