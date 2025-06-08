@@ -1,8 +1,8 @@
 # Jakub Zeman
 ---
 ## Zvolené rozšíření
-- Popisek
-- Popisek2
+- TypeScript
+- TailwindCSS
 ---
 ## Spuštění aplikace
 
