@@ -1,114 +1,242 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evidence zvířat</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evidence zvířat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>Seznam zvířat</h1>
-  <section>
-    <h2>Přidat nové zvíře</h2>
-    <form id="animal-form">
-      <div> 
-        <label for="name">Jméno zvířete:</label>
-        <input type="text" id="name" name="name" required>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8 font-sans text-gray-800">
+  <h1 class="text-4xl font-extrabold text-center mb-8 flex items-center justify-center gap-3">
+    <!-- Ikona u hlavního nadpisu -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+      <path d="M12 2C8 2 5 6 5 10a7 7 0 0014 0c0-4-3-8-7-8zM12 13a3 3 0 11.001-6.001A3 3 0 0112 13z"/>
+    </svg>
+    Evidence zvířat
+  </h1>
+
+  <!-- Přidání nového zvířete -->
+  <section class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6 mb-10">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-green-700">
+      <!-- Ikona přidání -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+      Přidat nové zvíře
+    </h2>
+    <form id="animal-form" class="space-y-5">
+      <div>
+        <label for="name" class="block text-gray-700 font-semibold mb-1">Jméno zvířete:</label>
+        <input
+          class="w-full border border-green-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+          type="text"
+          id="name"
+          name="name"
+          required
+        />
       </div>
       <div>
-        <label for="species">Druh:</label>
-        <input type="text" id="species" name="species" required>
+        <label for="species" class="block text-gray-700 font-semibold mb-1">Druh:</label>
+        <input
+          class="w-full border border-green-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+          type="text"
+          id="species"
+          name="species"
+          required
+        />
       </div>
-      <div>
-        <button type="submit">Přidat zvíře</button>
-      </div>
+      <button
+        class="w-full bg-green-600 hover:bg-green-800 text-white font-bold py-3 rounded flex items-center justify-center gap-2 transition-colors"
+        type="submit"
+      >
+        <!-- Ikona plus -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Přidat zvíře
+      </button>
     </form>
   </section>
-  <section>
-    <h2>Vyhledat zvíře podle ID</h2>
-    <form id="search-animal-form">
-      <div> 
-        <label for="search-animal-id">ID zvířete:</label>
-        <input type="number" id="search-animal-id" name="search-animal-id" required>
-      </div>
+
+  <!-- Vyhledání zvířete podle ID -->
+  <section class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6 mb-10">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-blue-700">
+      <!-- Ikona hledání -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      Vyhledat zvíře podle ID
+    </h2>
+    <form id="search-animal-form" class="space-y-5">
       <div>
-        <button type="submit">Vyhledat zvíře</button>
+        <label for="search-animal-id" class="block text-gray-700 font-semibold mb-1">ID zvířete:</label>
+        <input
+          class="w-full border border-blue-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          type="number"
+          id="search-animal-id"
+          name="search-animal-id"
+          required
+        />
       </div>
+      <button
+        class="w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 rounded flex items-center justify-center gap-2 transition-colors"
+        type="submit"
+      >
+        <!-- Ikona lupa -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        Vyhledat zvíře
+      </button>
     </form>
   </section>
-  <section>
-    <h2>Upravit zvíře</h2>
-    <form id="edit-animal-form">
-      <div> 
-        <label for="edit-animal-id">ID zvířete:</label>
-        <input type="number" id="edit-animal-id" name="edit-animal-id" required>
+
+  <!-- Úprava zvířete -->
+  <section class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6 mb-10">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-yellow-700">
+      <!-- Ikona tužky -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4 12.5-12.5z" />
+      </svg>
+      Upravit zvíře
+    </h2>
+    <form id="edit-animal-form" class="space-y-5">
+      <div>
+        <label for="edit-animal-id" class="block text-gray-700 font-semibold mb-1">ID zvířete:</label>
+        <input
+          class="w-full border border-yellow-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          type="number"
+          id="edit-animal-id"
+          name="edit-animal-id"
+          required
+        />
       </div>
       <div>
-        <label for="edit-name">Nové jméno zvířete:</label>
-        <input type="text" id="edit-name" name="edit-name" required>
+        <label for="edit-name" class="block text-gray-700 font-semibold mb-1">Nové jméno zvířete:</label>
+        <input
+          class="w-full border border-yellow-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          type="text"
+          id="edit-name"
+          name="edit-name"
+          required
+        />
       </div>
       <div>
-        <label for="edit-species">Nový druh:</label>
-        <input type="text" id="edit-species" name="edit-species" required>
+        <label for="edit-species" class="block text-gray-700 font-semibold mb-1">Nový druh:</label>
+        <input
+          class="w-full border border-yellow-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          type="text"
+          id="edit-species"
+          name="edit-species"
+          required
+        />
       </div>
-      <div>
-        <button type="submit">Upravit zvíře</button>
-      </div>
+      <button
+        class="w-full bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-3 rounded flex items-center justify-center gap-2 transition-colors"
+        type="submit"
+      >
+        <!-- Ikona tužky -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4 12.5-12.5z" />
+        </svg>
+        Upravit zvíře
+      </button>
     </form>
   </section>
-  <section>
-    <h2>Smazat zvíře</h2>
-    <form id="delete-animal-form">
-      <div> 
-        <label for="delete-animal-id">ID zvířete:</label>
-        <input type="number" id="delete-animal-id" name="delete-animal-id" required>
-      </div>
+
+  <!-- Smazání zvířete -->
+  <section class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-red-700">
+      <!-- Ikona koše -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7M10 11v6m4-6v6M9 7V4h6v3M4 7h16l-1 12H5L4 7z" />
+      </svg>
+      Smazat zvíře
+    </h2>
+    <form id="delete-animal-form" class="space-y-5">
       <div>
-        <button type="submit">Smazat zvíře</button>
+        <label for="delete-animal-id" class="block text-gray-700 font-semibold mb-1">ID zvířete:</label>
+        <input
+          class="w-full border border-red-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+          type="number"
+          id="delete-animal-id"
+          name="delete-animal-id"
+          required
+        />
       </div>
+      <button
+        class="w-full bg-red-600 hover:bg-red-800 text-white font-bold py-3 rounded flex items-center justify-center gap-2 transition-colors"
+        type="submit"
+      >
+        <!-- Ikona koše -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7L5 7M10 11v6m4-6v6M9 7V4h6v3M4 7h16l-1 12H5L4 7z" />
+        </svg>
+        Smazat zvíře
+      </button>
     </form>
   </section>
-  <section>
-    <h2>Seznam zvířat</h2>
-    <ul id="animal-list">
-      <!-- Zde se budou zobrazovat zvířata -->
+  <section class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-gray-900">
+      <!-- Ikona seznamu -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+        <path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M12 12a4 4 0 100-8 4 4 0 000 8z" />
+      </svg>
+      Seznam zvířat
+    </h2>
+    <ul id="animal-list" class="space-y-3">
+      <!-- Zvířata budou vložena zde -->
     </ul>
-  </section>
+</section>
+
   <script>
     document.addEventListener('DOMContentLoaded', fetchAnimals);
 
-    //add animal
-    document.getElementById('animal-form').addEventListener('submit', async e => {
+    // Přidání zvířete
+    document.getElementById('animal-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('name').value;
       const species = document.getElementById('species').value;
-      await fetch('/api/animals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, species })
-      });
-      e.target.reset();
-      fetchAnimals();
+      try {
+        const response = await fetch('/api/animals', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, species }),
+        });
+        if (response.ok) {
+          document.getElementById('animal-form').reset();
+          fetchAnimals();
+        } else {
+          alert('Chyba při přidávání zvířete');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+        alert('Chyba při přidávání zvířete');
+      }
     });
 
-    //search animal by id
-    document.getElementById('search-animal-form').addEventListener('submit', async e => {
+    // Vyhledání zvířete
+    document.getElementById('search-animal-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('search-animal-id').value;
       try {
         const response = await fetch(`/api/animals/${id}`);
         if (response.ok) {
           const animal = await response.json();
-          alert(`Zvíře: ${animal.name} (${animal.species})`);
+          alert(`Zvíře: ${animal.name} - ${animal.species}`);
         } else {
           alert('Zvíře nebylo nalezeno');
         }
       } catch (error) {
         console.error('Chyba:', error);
+        alert('Chyba při vyhledávání zvířete');
       }
     });
 
-    //edit animal
-    document.getElementById('edit-animal-form').addEventListener('submit', async e => {
+    // Úprava zvířete
+    document.getElementById('edit-animal-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('edit-animal-id').value;
       const name = document.getElementById('edit-name').value;
@@ -117,7 +245,7 @@
         const response = await fetch(`/api/animals/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, species })
+          body: JSON.stringify({ name, species }),
         });
         if (response.ok) {
           document.getElementById('edit-animal-form').reset();
@@ -127,16 +255,17 @@
         }
       } catch (error) {
         console.error('Chyba:', error);
+        alert('Chyba při upravování zvířete');
       }
     });
 
-    //delete animal
-    document.getElementById('delete-animal-form').addEventListener('submit', async e => {
+    // Smazání zvířete
+    document.getElementById('delete-animal-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('delete-animal-id').value;
       try {
         const response = await fetch(`/api/animals/${id}`, {
-          method: 'DELETE'
+          method: 'DELETE',
         });
         if (response.ok) {
           document.getElementById('delete-animal-form').reset();
@@ -146,21 +275,30 @@
         }
       } catch (error) {
         console.error('Chyba:', error);
+        alert('Chyba při mazání zvířete');
       }
     });
 
-    //GET all animals
+    // Načtení zvířat
     async function fetchAnimals() {
-      const res = await fetch('/api/animals');
-      const data = await res.json();
-      const list = document.getElementById('animal-list');
-      list.innerHTML = '';
-      data.forEach(a => {
-        const li = document.createElement('li');
-        li.textContent = `${a.name} (${a.species})`;
-        list.appendChild(li);
-      });
-    };
+      try {
+        const response = await fetch('/api/animals');
+        if (response.ok) {
+          const animals = await response.json();
+          const list = document.getElementById('animal-list');
+          list.innerHTML = '';
+          animals.forEach(animal => {
+            const li = document.createElement('li');
+            li.textContent = `ID: ${animal.id}, Jméno: ${animal.name}, Druh: ${animal.species}`;
+            list.appendChild(li);
+          });
+        } else {
+          console.error('Nelze načíst zvířata');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+      }
+    }
   </script>
 </body>
 </html>

@@ -1,188 +1,325 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evidence návštěv</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evidence návštěv</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Seznam návštěv</h1>
-    <section>
-        <h2>Přidat novou návštěvu</h2>
-        <form id="visit-form">
-            <div>
-                <label for="visitor_id">ID návštěvníka:</label>
-                <input type="number" id="visitor_id" name="visitor_id" required>
-            </div>
-            <div>
-                <label for="animal_id">ID zvířete:</label>
-                <input type="number" id="animal_id" name="animal_id" required>
-            </div>
-            <div>
-                <label for="visit_date">Datum návštěvy:</label>
-                <input type="date" id="visit_date" name="visit_date" required>
-            </div>
-            <div>
-                <button type="submit">Přidat návštěvu</button>
-            </div>
-        </form>
-    </section>
-    <section>
-        <h2>Vyhledat návštěvu podle ID</h2>
-        <form id="search-visit-form">
-            <div> 
-                <label for="search-visit-id">ID návštěvy:</label>
-                <input type="number" id="search-visit-id" name="search-visit-id" required>
-            </div>
-            <div>
-                <button type="submit">Vyhledat návštěvu</button>
-            </div>
-        </form>
-    </section>
-    <section>
-        <h2>Upravit návštěvu</h2>
-        <form id="edit-visit-form">
-            <div> 
-                <label for="edit-visit-id">ID návštěvy:</label>
-                <input type="number" id="edit-visit-id" name="edit-visit-id" required>
-            </div>
-            <div>
-                <label for="edit-visitor_id">ID návštěvníka:</label>
-                <input type="number" id="edit-visitor_id" name="edit-visitor_id" required>
-            </div>
-            <div>
-                <label for="edit-animal_id">ID zvířete:</label>
-                <input type="number" id="edit-animal_id" name="edit-animal_id" required>
-            </div>
-            <div>
-                <label for="edit-visit_date">Datum návštěvy:</label>
-                <input type="date" id="edit-visit_date" name="edit-visit_date" required>
-            </div>
-            <div>
-                <button type="submit">Upravit návštěvu</button>
-            </div>
-        </form>
-    </section>
-    <section>
-        <h2>Smazat návštěvu</h2>
-        <form id="delete-visit-form">
-            <div> 
-                <label for="delete-visit-id">ID návštěvy:</label>
-                <input type="number" id="delete-visit-id" name="delete-visit-id" required>
-            </div>
-            <div>
-                <button type="submit">Smazat návštěvu</button>
-            </div>
-        </form>
-    </section>
-    <section>
-        <h2>Seznam návštěv</h2>
-        <ul id="visit-list">
-            <!-- Zde se budou zobrazovat návštěvy -->
-        </ul>
-    </section>
-    <script>
-        document.addEventListener('DOMContentLoaded', fetchVisits);
+<body class="bg-gray-50 min-h-screen p-4 md:p-8 font-sans text-gray-800">
+    <!-- Nadpis -->
+    <h1 class="text-4xl font-extrabold text-center mb-8 flex items-center justify-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z" />
+      </svg>
+      Evidence návštěv
+    </h1>
 
-        //add visit
-        document.getElementById('visit-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const visitor_id = document.getElementById('visitor_id').value;
-            const animal_id = document.getElementById('animal_id').value;
-            const visit_date = document.getElementById('visit_date').value;
-            try {
-                const response = await fetch('/api/visits', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ visitor_id, animal_id, visit_date })
-                });
-                if (response.ok) {
-                    document.getElementById('visit-form').reset();
-                    fetchVisits();
-                } else {
-                    alert('Chyba při přidávání návštěvy');
-                }
-            } catch (error) {
-                console.error('Chyba:', error);
-            }
+    <!-- Přidat návštěvu -->
+    <section class="mb-12 max-w-lg mx-auto">
+      <h2 class="flex items-center text-2xl font-semibold mb-6 text-purple-600 justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Přidat novou návštěvu
+      </h2>
+      <form id="visit-form" class="space-y-5 bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
+        <div>
+          <label for="visitor_id" class="block mb-1 font-medium text-gray-700">ID návštěvníka:</label>
+          <input
+            type="number"
+            id="visitor_id"
+            name="visitor_id"
+            required
+            class="w-full rounded-md border border-purple-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+          />
+        </div>
+        <div>
+          <label for="animal_id" class="block mb-1 font-medium text-gray-700">ID zvířete:</label>
+          <input
+            type="number"
+            id="animal_id"
+            name="animal_id"
+            required
+            class="w-full rounded-md border border-purple-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+          />
+        </div>
+        <div>
+          <label for="visit_date" class="block mb-1 font-medium text-gray-700">Datum návštěvy:</label>
+          <input
+            type="date"
+            id="visit_date"
+            name="visit_date"
+            required
+            class="w-full rounded-md border border-purple-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+          />
+        </div>
+        <div class="flex justify-center">
+          <button
+            type="submit"
+            class="flex items-center bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Přidat návštěvu
+          </button>
+        </div>
+      </form>
+    </section>
+
+<!-- Vyhledat návštěvu podle ID -->
+<section class="mb-12 max-w-lg mx-auto">
+  <h2 class="flex items-center text-2xl font-semibold mb-5 text-green-600 justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+    Vyhledat návštěvu podle ID
+  </h2>
+  <form id="search-visit-form" class="space-y-5 bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
+    <div>
+      <label for="search-visit-id" class="block mb-1 font-medium text-gray-700">ID návštěvy:</label>
+      <input
+        type="number"
+        id="search-visit-id"
+        name="search-visit-id"
+        required
+        class="w-full rounded-md border border-green-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+      />
+    </div>
+    <div class="flex justify-center">
+      <button
+        type="submit"
+        class="flex items-center bg-green-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-green-700 transition"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        Vyhledat návštěvu
+      </button>
+    </div>
+  </form>
+</section>
+
+<!-- Upravit návštěvu -->
+<section class="mb-12 max-w-lg mx-auto">
+  <h2 class="flex items-center text-2xl font-semibold mb-5 text-yellow-500 justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M11 4h2m-1 0v16m5-6l3 3m-3-3l-3 3" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16 4l4 4M5 12v8h8" />
+    </svg>
+    Upravit návštěvu
+  </h2>
+  <form id="edit-visit-form" class="space-y-5 bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
+    <div> 
+      <label for="edit-visit-id" class="block mb-1 font-medium text-gray-700">ID návštěvy:</label>
+      <input
+        type="number"
+        id="edit-visit-id"
+        name="edit-visit-id"
+        required
+        class="w-full rounded-md border border-yellow-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+      />
+    </div>
+    <div>
+      <label for="edit-visitor_id" class="block mb-1 font-medium text-gray-700">ID návštěvníka:</label>
+      <input
+        type="number"
+        id="edit-visitor_id"
+        name="edit-visitor_id"
+        required
+        class="w-full rounded-md border border-yellow-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+      />
+    </div>
+    <div>
+      <label for="edit-animal_id" class="block mb-1 font-medium text-gray-700">ID zvířete:</label>
+      <input
+        type="number"
+        id="edit-animal_id"
+        name="edit-animal_id"
+        required
+        class="w-full rounded-md border border-yellow-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+      />
+    </div>
+    <div>
+      <label for="edit-visit_date" class="block mb-1 font-medium text-gray-700">Datum návštěvy:</label>
+      <input
+        type="date"
+        id="edit-visit_date"
+        name="edit-visit_date"
+        required
+        class="w-full rounded-md border border-yellow-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+      />
+    </div>
+    <div class="flex justify-center">
+      <button
+        type="submit"
+        class="bg-yellow-500 text-white font-semibold px-6 py-3 rounded-md hover:bg-yellow-600 transition flex items-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 4h2m-1 0v16m5-6l3 3m-3-3l-3 3" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 4l4 4M5 12v8h8" />
+        </svg>
+        Upravit návštěvu
+      </button>
+    </div>
+  </form>
+</section>
+
+<!-- Smazat návštěvu -->
+<section class="mb-12 max-w-lg mx-auto">
+  <h2 class="flex items-center text-2xl font-semibold mb-5 text-red-600 justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    Smazat návštěvu
+  </h2>
+  <form id="delete-visit-form" class="space-y-5 bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
+    <div> 
+      <label for="delete-visit-id" class="block mb-1 font-medium text-gray-700">ID návštěvy:</label>
+      <input
+        type="number"
+        id="delete-visit-id"
+        name="delete-visit-id"
+        required
+        class="w-full rounded-md border border-red-600 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+      />
+    </div>
+    <div class="flex justify-center">
+      <button
+        type="submit"
+        class="bg-red-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-red-700 transition flex items-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Smazat návštěvu
+      </button>
+    </div>
+  </form>
+</section>
+<section class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2 text-gray-900">
+      <!-- Ikona lidí u seznamu -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24" stroke="none">
+        <path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M12 12a4 4 0 100-8 4 4 0 000 8z" />
+      </svg>
+      Seznam návštěv
+    </h2>
+    <ul id="visit-list" class="space-y-3">
+      <!-- Návštěvy budou vloženy zde -->
+    </ul>
+</section>
+  <script>
+    document.addEventListener('DOMContentLoaded', fetchVisits);
+
+    // Přidání návštěvy
+    document.getElementById('visit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const visitor_id = document.getElementById('visitor_id').value;
+      const animal_id = document.getElementById('animal_id').value;
+      const visit_date = document.getElementById('visit_date').value;
+      try {
+        const response = await fetch('/api/visits', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ visitor_id, animal_id, visit_date }),
         });
-
-        //search visit
-        document.getElementById('search-visit-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('search-visit-id').value;
-            try {
-                const response = await fetch(`/api/visits/${id}`);
-                if (response.ok) {
-                    const visit = await response.json();
-                    alert(`Návštěva: ${visit.visitor_id} - ${visit.animal_id} - ${visit.visit_date}`);
-                } else {
-                    alert('Návštěva nebyla nalezena');
-                }
-            } catch (error) {
-                console.error('Chyba:', error);
-            }
-        });
-
-        //edit visit
-        document.getElementById('edit-visit-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('edit-visit-id').value;
-            const visitor_id = document.getElementById('edit-visitor_id').value;
-            const animal_id = document.getElementById('edit-animal_id').value;
-            const visit_date = document.getElementById('edit-visit_date').value;
-            try {
-                const response = await fetch(`/api/visits/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ visitor_id, animal_id, visit_date })
-                });
-                if (response.ok) {
-                    document.getElementById('edit-visit-form').reset();
-                    fetchVisits();
-                } else {
-                    alert('Chyba při upravování návštěvy');
-                }
-            } catch (error) {
-                console.error('Chyba:', error);
-            }
-        });
-
-        //delete visit
-        document.getElementById('delete-visit-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('delete-visit-id').value;
-            try {
-                const response = await fetch(`/api/visits/${id}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    document.getElementById('delete-visit-form').reset();
-                    fetchVisits();
-                } else {
-                    alert('Chyba při mazání návštěvy');
-                }
-            } catch (error) {
-                console.error('Chyba:', error);
-            }
-        });
-
-        //get all visits
-        async function fetchVisits() {
-            try {
-                const response = await fetch('/api/visits');
-                const visits = await response.json();
-                const visitList = document.getElementById('visit-list');
-                visitList.innerHTML = '';
-                visits.forEach(visit => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<strong>${visit.visitor_id} - ${visit.animal_id} - ${visit.visit_date}</strong>`;
-                    visitList.appendChild(li);
-                });
-            } catch (error) {
-                console.error('Chyba při načítání návštěv:', error);
-            }
+        if (response.ok) {
+          document.getElementById('visit-form').reset();
+          fetchVisits();
+        } else {
+          alert('Chyba při přidávání návštěvy');
         }
-    </script>
+      } catch (error) {
+        console.error('Chyba:', error);
+        alert('Chyba při přidávání návštěvy');
+      }
+    });
+
+    // Vyhledání návštěvy
+    document.getElementById('search-visit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('search-visit-id').value;
+      try {
+        const response = await fetch(`/api/visits/${id}`);
+        if (response.ok) {
+          const visit = await response.json();
+          alert(`Návštěva: ${visit.visitor_id} - ${visit.animal_id} - ${visit.visit_date}`);
+        } else {
+          alert('Návštěva nebyla nalezena');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+        alert('Chyba při vyhledávání návštěvy');
+      }
+    });
+
+    // Úprava návštěvy
+    document.getElementById('edit-visit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('edit-visit-id').value;
+      const visitor_id = document.getElementById('edit-visitor_id').value;
+      const animal_id = document.getElementById('edit-animal_id').value;
+      const visit_date = document.getElementById('edit-visit_date').value;
+      try {
+        const response = await fetch(`/api/visits/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ visitor_id, animal_id, visit_date }),
+        });
+        if (response.ok) {
+          document.getElementById('edit-visit-form').reset();
+          fetchVisits();
+        } else {
+          alert('Chyba při upravování návštěvy');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+        alert('Chyba při upravování návštěvy');
+      }
+    });
+
+    // Smazání návštěvy
+    document.getElementById('delete-visit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('delete-visit-id').value;
+      try {
+        const response = await fetch(`/api/visits/${id}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          document.getElementById('delete-visit-form').reset();
+          fetchVisits();
+        } else {
+          alert('Chyba při mazání návštěvy');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+        alert('Chyba při mazání návštěvy');
+      }
+    });
+
+    // Načtení návštěv
+    async function fetchVisits() {
+      try {
+        const response = await fetch('/api/visits');
+        if (response.ok) {
+          const visits = await response.json();
+          const list = document.getElementById('visit-list');
+          list.innerHTML = '';
+          visits.forEach(visit => {
+            const li = document.createElement('li');
+            li.textContent = `ID: ${visit.id}, Návštěvník: ${visit.visitor_id}, Zvíře: ${visit.animal_id}, Datum: ${visit.visit_date}`;
+            list.appendChild(li);
+          });
+        } else {
+          console.error('Nelze načíst návštěvy');
+        }
+      } catch (error) {
+        console.error('Chyba:', error);
+      }
+    }
+  </script>
 </body>
 </html>
