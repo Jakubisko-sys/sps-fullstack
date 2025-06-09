@@ -1,15 +1,19 @@
 {
   "name": "sps-fullstack",
   "version": "1.0.0",
+  "type": "module",
   "description": "0: Evidence návštěvníků v ZOO",
-  "main": "index.ts",
+  "main": "index.html",
   "scripts": {
-    "start": "ts-node server.ts"
+    "dev": "nodemon --exec node --loader ts-node/esm server.ts",
+    "start": "ts-node server.ts",
+    "seed": "ts-node database/seed.js"
   },
   "author": "Jakub Zeman",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
+    "nodemon": "^3.1.10",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
