@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { Database } from 'sqlite3'; // Typ pro SQLite (pokud používáš sqlite3)
 
 // Import databáze (typ můžeš upravit podle tvého nastavení)
-import db from '../database/db';
+import db from '../database/db.ts';
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Database } from 'sqlite3'; 
-import db from '../database/db';
+import db from '../database/db.ts';
 
 const router = express.Router();
 
