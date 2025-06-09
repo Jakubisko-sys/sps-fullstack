@@ -6,5 +6,5 @@
 ---
 ## Spuštění aplikace
 
-- Popisek
-- Popisek2
+- Instalace potřebných věcí: npm install
+- Spuštění serveru, aplikace: npm start
